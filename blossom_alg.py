@@ -1,10 +1,19 @@
 import networkx as nx
 import pandas as pd
 import time
+import random
 
 start_time = time.time()
 
-data = pd.read_csv('data.csv')
+# get samples
+totalrows = sum(1 for row in open('input_data.csv')) - 1 # not including header row
+samplesize = 1000
+# random.sample returns a list of ints that will be indices to skip in skiprows
+skip = sorted(random.sample(range(1, totalrows+1), totalrows-samplesize))
+print("total:", totalrows)
+print("skipping:", len(skip))
+
+data = pd.read_csv('input_data.csv', skiprows=skip)
 
 # create empty graph
 weighted_graph = nx.Graph()
@@ -24,9 +33,11 @@ for i, row in data.iterrows():
 # 'matching' is a set of tuples of each optimal match
 matching_start_time = time.time()
 matching = nx.max_weight_matching(weighted_graph, maxcardinality=True)
-print("--- %s seconds for matching ---" % (time.time() - matching_start_time))
+matching_time = time.time() - matching_start_time
 
-print("MATCHING:", matching)
+print("--- %s seconds for matching %s samples ---" % (matching_time, samplesize))
+print("--- found %s matches ---" % len(matching))
+print("matchings for %s samples: %s" % (samplesize, matching))
 
 
 print("--- %s seconds for entire script ---" % (time.time() - start_time))

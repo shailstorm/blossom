@@ -1,7 +1,7 @@
 import pandas as pd
 
 # load CSV file into a pandas dataframe
-df = pd.read_csv('orders_data.csv')
+df = pd.read_csv('orders_data')
 
 # create empty list to store results
 results = []
@@ -36,4 +36,4 @@ for i in range(len(order_ids)):
 results_df = pd.DataFrame(results)
 
 # save results to an output CSV file
-results_df.to_csv('data.csv', index=False)
+results_df.to_csv('input_data.csv', index=False)
