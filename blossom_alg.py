@@ -6,11 +6,11 @@ import random
 start_time = time.time()
 
 # get samples
-totalrows = sum(1 for row in open('input_data.csv')) - 1 # not including header row
-samplesize = 1000
+datasize = sum(1 for row in open('input_data.csv')) - 1 # not including header row
+samplesize = datasize # 'datasize' if want to run on all orders
 # random.sample returns a list of ints that will be indices to skip in skiprows
-skip = sorted(random.sample(range(1, totalrows+1), totalrows-samplesize))
-print("total:", totalrows)
+skip = sorted(random.sample(range(1, datasize+1), datasize-samplesize))
+print("total:", datasize)
 print("skipping:", len(skip))
 
 data = pd.read_csv('input_data.csv', skiprows=skip)
@@ -37,7 +37,9 @@ matching_time = time.time() - matching_start_time
 
 print("--- %s seconds for matching %s samples ---" % (matching_time, samplesize))
 print("--- found %s matches ---" % len(matching))
-print("matchings for %s samples: %s" % (samplesize, matching))
+# print("matchings for %s samples: %s" % (samplesize, matching))
 
+matching_with_weights = [(node1, node2, weighted_graph[node1][node2]['weight']) for (node1, node2) in matching]
+print("matchings with weights for %s samples: %s" % (samplesize, matching_with_weights))
 
-print("--- %s seconds for entire script ---" % (time.time() - start_time))
+# print("--- %s seconds for entire script ---" % (time.time() - start_time))
